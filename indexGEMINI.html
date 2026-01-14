@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Fardamentos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="mb-4">📋 Controle de Encomendas</h2>
+
+        <div class="card p-4 mb-4 shadow-sm">
+            <form id="formPedido">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Nome do Cliente</label>
+                        <input type="text" id="cliente" class="form-control" required placeholder="Ex: Maria Silva">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Escola</label>
+                        <select id="escola" class="form-select">
+                            <option>Santa Cecília</option>
+                            <option>Farias Brito</option>
+                            <option>Ari de Sá</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Peça</label>
+                        <input type="text" id="peca" class="form-control" placeholder="Ex: Camiseta G">
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card p-4 shadow-sm">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Escola</th>
+                        <th>Peça/Detalhes</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaPedidos">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 1. Selecionar os elementos do HTML
+        const form = document.getElementById('formPedido');
+        const tabela = document.getElementById('tabelaPedidos');
+
+        // 2. Carregar pedidos salvos ao abrir a página
+        document.addEventListener('DOMContentLoaded', lerPedidos);
+
+        // 3. Função para Salvar Pedido
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Impede a página de recarregar
+
+            // Criar objeto com os dados
+            const novoPedido = {
+                id: Date.now(), // Gera um ID único baseado na hora
+                cliente: document.getElementById('cliente').value,
+                escola: document.getElementById('escola').value,
+                peca: document.getElementById('peca').value,
+                status: 'Pendente'
+            };
+
+            // Salvar no LocalStorage (Memória do navegador)
+            let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+            pedidos.push(novoPedido);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+            // Limpar formulário e atualizar tabela
+            form.reset();
+            lerPedidos();
+        });
+
+        // 4. Função para Ler e Mostrar Pedidos na Tela
+        function lerPedidos() {
+            tabela.innerHTML = ''; // Limpa a tabela antes de recriar
+            let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+
+            pedidos.forEach(pedido => {
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${pedido.cliente}</td>
+                        <td>${pedido.escola}</td>
+                        <td>${pedido.peca}</td>
+                        <td><span class="badge bg-warning">${pedido.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deletarPedido(${pedido.id})">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // 5. Função para Deletar
+        function deletarPedido(id) {
+            let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+            // Filtra mantendo apenas os pedidos que NÃO tem aquele ID
+            pedidos = pedidos.filter(p => p.id !== id);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            lerPedidos();
+        }
+    </script>
+</body>
+
+</html>

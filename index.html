@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="form-box">
+      <!-- Formulário de Encomenda -->
+      <h1>Encomenda</h1>
+      <form>
+        <div>
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" required />
+        </div>
+
+        <div>
+          <label for="escola">Escola:</label>
+          <input type="text" id="escola" name="escola" required />
+        </div>
+
+        <div>
+          <label for="contato">Contato:</label>
+          <input type="text" id="contato" name="contato" required />
+        </div>
+
+        <div>
+          <label for="responsavel">Responsável:</label>
+          <input type="text" id="responsavel" name="responsavel" required />
+        </div>
+
+        <div>
+          <label for="pago">Pago:</label>
+          <input type="checkbox" id="pago" name="pago" />
+        </div>
+
+        <div>
+          <label for="comanda">Comanda:</label>
+          <input type="text" id="comanda" name="comanda" required />
+        </div>
+
+        <div>
+          <label for="data-encomenda">Data de Encomenda:</label>
+          <input
+            type="date"
+            id="data-encomenda"
+            name="data-encomenda"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="data-termino">Data de Término:</label>
+          <input type="date" id="data-termino" name="data-termino" required />
+        </div>
+
+        <div>
+          <label for="data-entrega">Data de Entrega:</label>
+          <input type="date" id="data-entrega" name="data-entrega" required />
+        </div>
+
+        <div>
+          <label>Items:</label>
+          <div id="items-container">
+            <div class="item-row">
+              <input
+                type="text"
+                class="item-input"
+                placeholder="Digite um item"
+                required
+              />
+              <button
+                type="button"
+                class="btn-remove"
+                onclick="removeItem(this)"
+              >
+                Remover
+              </button>
+            </div>
+          </div>
+          <button type="button" class="btn-add" onclick="addItem()">
+            Adicionar Item
+          </button>
+        </div>
+
+        <button type="submit" class="btn-submit">Salvar Encomenda</button>
+      </form>
+    </div>
+  </body>
+
+  <script>
+    function addItem() {
+      const container = document.getElementById("items-container");
+      const newItem = document.createElement("div");
+      newItem.className = "item-row";
+      newItem.innerHTML = `
+                <input type="text" class="item-input" placeholder="Digite um item" required>
+                <button type="button" class="btn-remove" onclick="removeItem(this)">Remover</button>
+            `;
+      container.appendChild(newItem);
+    }
+
+    function removeItem(button) {
+      const container = document.getElementById("items-container");
+      if (container.children.length > 1) {
+        button.parentElement.remove();
+      } else {
+        alert("Deve haver pelo menos um item");
+      }
+    }
+  </script>
+</html>
